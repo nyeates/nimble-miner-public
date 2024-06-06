@@ -89,7 +89,7 @@ def execute(task_args):
     )
 
     training_args = TrainingArguments(
-        output_dir="my_model", evaluation_strategy="epoch", save_strategy='epoch', seed=task_args['seed'], full_determinism=True
+        output_dir="my_model", evaluation_strategy="epoch", save_strategy='epoch', seed=task_args['seed'], dataloader_num_workers=4
     )
 
     trainer = Trainer(
@@ -155,7 +155,7 @@ def complete_task(wallet_address,training_duration=0, max_retries=5, retry_delay
             }
             json_data = json.dumps({"address": wallet_address})
             files["r"] = (None, json_data, "application/json")
-            response = requests.post(url, files=files, timeout=600)
+            response = requests.post(url, files=files, timeout=120)
             if response.status_code == 200:
                 log_task(wallet_address,training_duration,"Success")
                 return response.json()
@@ -181,7 +181,7 @@ def perform():
                 print_in_color("### Checking for updated miner:", "\033[31m")
                 check_for_updates()
                 print_in_color(f"Preparing", "\033[33m")
-                time.sleep(30)
+                time.sleep(10)
                 gpu_names = get_gpu_name()
                 task_args = register_particle(addr, gpu_names)
                 print_in_color(f"Address {addr} received the task.", "\033[33m")
@@ -193,7 +193,7 @@ def perform():
                 print_in_color("### Deleted the model.", "\033[31m")
                 print_in_color("### Disk space:", "\033[31m")
                 check_disk_space()
-                time.sleep(30)
+                time.sleep(10)
             except Exception as e:
                 print_in_color(f"Error: {e}", "\033[31m")
     else:
