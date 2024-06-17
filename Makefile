@@ -29,6 +29,7 @@ check:
 logs:
 	@echo "----------------------------------"
 	
+	source ./nimenv_localminers/bin/activate && \
 	python showlogs.py
 	
 	@echo "----------------------------------"
